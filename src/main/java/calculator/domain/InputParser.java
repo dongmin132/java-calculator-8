@@ -10,13 +10,19 @@ public class InputParser {
     private static final Pattern CUSTOM_DELIMITER_PATTERN = Pattern.compile("//(.)\n(.*)");
 
     public String[] parse(String input) {
+
+        if (input.contains("\\n")) {
+            input = input.replace("\\n", "\n");
+        }
+
         Matcher matcher = CUSTOM_DELIMITER_PATTERN.matcher(input);
 
         // 커스텀 구분자 존재 시
         if(matcher.matches()) {
             String customDelimiter = matcher.group(1);  // 구분자
             String numbers = matcher.group(2);          //숫자 부분
-            return numbers.split(customDelimiter);
+
+            return numbers.split(Pattern.quote(customDelimiter));
         }
 
         // 기본 구분자(, :) 사용
